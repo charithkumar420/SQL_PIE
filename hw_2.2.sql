@@ -218,3 +218,28 @@ use HANDLE;
 select * from customers;
 select * from products;
 select * from orders;
+
+select product_id,product_name,
+CONCAT(category,' -- ',Price) as ItePrice
+from products;
+
+select customer_id,name,
+CONCAT(city,' -- ',signup_date) as ItePrice
+from customers;
+
+select product_id,product_name,
+CONCAT(category,' of Rs. ',Price) as ItePrice
+from products;
+
+select order_date, len(order_date) as DateLength
+from orders;
+
+select product_name,UPPER(product_name) as UpperCaseName from products;
+
+select product_name,LOWER(product_name) as LowerCaseName from products;
+
+select product_name,TRIM(product_name) as CleanName from products;
+
+select product_name,substring(product_name,1,4) as SubsstringOfName from products;
+
+select * from orders;
