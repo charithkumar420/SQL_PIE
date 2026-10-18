@@ -243,3 +243,103 @@ select product_name,TRIM(product_name) as CleanName from products;
 select product_name,substring(product_name,1,4) as SubsstringOfName from products;
 
 select * from orders;
+
+select order_id,order_date, DAY(order_date) as DayDate from orders;
+
+select order_id,order_date, month(order_date) as MonthDate from orders;
+
+select order_id,order_date, Year(order_date) as YearDate from orders;
+
+select datediff(day,'2026-01-10','2026-04-18') as DayDate;
+
+select order_id,order_date, datediff(day,order_date,cast('2026-04-18' as date)) as DayDate from orders;
+
+select order_id,order_date, datediff(MONTH,order_date,cast('2026-04-18' as date)) as MOnthDate from orders;
+
+select order_id,order_date, datediff(day,order_date,cast('2026-04-18' as date)) as YearDate from orders;
+
+select order_id,order_date, DAY(order_date) as DayDate from orders;
+
+-- JOINS P-1
+-- INNER JOIN, LEFT JOIN, RIGHT JOIN
+
+use HANDLE;
+
+select * from customers;
+select * from products;
+select * from orders;
+
+select c.customer_id,c.name,c.city,                      -- Inner Join returns only rows that have matching values in both tables.
+o.order_id,o.customer_id,o.quantity from customers as c
+inner join orders as o
+on c.customer_id=o.customer_id;
+
+select c.customer_id,c.name,c.city,                      -- LEFT JOIN returns all rows from the left table and matching rows from the right table. If there is no match,
+o.order_id,o.customer_id,o.quantity 
+from customers as c                                      -- right-table columns contain NULL.
+left join orders as o
+on c.customer_id=o.customer_id;
+
+select c.customer_id,c.name,c.city,                      -- RIGHT JOIN returns all rows from the right table and matching rows from the left table.
+o.order_id,o.customer_id,o.quantity 
+from customers as c                                      --  If there is no match, left-table columns contain NULL.
+right join orders as o
+on c.customer_id=o.customer_id;
+
+-- JOINS P-2
+-- FULL OUTER JOIN, SELF JOIN, CROSS JOIN
+
+select c.customer_id,c.name,c.city,                  -- FULL OUTER JOIN returns matching rows and also keeps unmatched rows from both tables. When a row has 
+o.order_id,o.customer_id,o.quantity                  -- no match, columns from the missing side show NULL
+from customers as c
+full outer join orders as o
+on c.customer_id=o.customer_id;
+
+select * from customers;
+select * from orders;
+
+select c.customer_id,c.name,c.city,
+o.order_id,o.quantity,o.order_date
+from customers as c
+full outer join orders as o
+on c.customer_id = o.customer_id;
+
+select c1.name as cu1, c2.name as cu2, c1.city     -- SELF JOIN joins one table to itself. SQL uses aliases so we can refer to the two appearances of the same table separately
+from customers as c1
+inner join customers as c2
+on c1.city=c2.city
+and c1.customer_id < c2.customer_id;
+
+select c1.name as cu1, c2.name as cu2, c1.city
+from customers as c1
+inner join customers as c2
+on c1.city=c2.city
+and c1.customer_id > c2.customer_id;
+
+select c1.name as cu1, c2.name as cu2, c1.city
+from customers as c1
+left join customers as c2
+on c1.city=c2.city
+and c1.customer_id < c2.customer_id;
+
+select c1.name as cu1, c2.name as cu2, c1.city
+from customers as c1
+right join customers as c2
+on c1.city=c2.city
+and c1.customer_id < c2.customer_id;
+
+-- CROSS JOIN
+
+-- CROSS JOIN creates every possible combination of rows from two tables or row sets. 
+-- It does not require an ON condition.
+-- The row-count formula:-
+-- Result rows = number of rows in Table A × number of rows in Table B
+
+select c.customer_id, c.name, t.category
+from customers as c
+cross join
+(
+values
+('Electronics'),('Furniture'),('Stationary')
+)as t(category)
+order by c.customer_id,t.category;
